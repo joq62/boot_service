@@ -10,6 +10,8 @@ doc_gen:
 	erl -s doc_gen start -sname doc
 worker:
 	rm -rf *_service  *_config erl_crasch.dump;
+#	node_config
+	git clone https://github.com/joq62/node_config.git;
 #	dns_service
 	git clone https://github.com/joq62/dns_service.git;	
 	cp dns_service/src/*.app dns_service/ebin;
