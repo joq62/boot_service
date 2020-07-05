@@ -15,9 +15,9 @@
 %% --------------------------------------------------------------------
 %% Include files
 %% --------------------------------------------------------------------
-
+-include("syslog.hrl").
 %% --------------------------------------------------------------------
--define(NODE_CONFIG_FILE,"node_config/node.config").
+
 %% --------------------------------------------------------------------
 %% Key Data structures
 %% 
@@ -110,17 +110,16 @@ stop_service(ServiceId)->
 %
 %% --------------------------------------------------------------------
 init([]) ->
-    {ok,NodeConfig}=file:consult(?NODE_CONFIG_FILE),
-    [net_kernel:connect_node(Node)||{_,Node}<-NodeConfig],
     case application:get_all_env() of
 	[]->
 	    ok;
 	Env->
 	    {services,ServicesAtom}=lists:keyfind(services,1,Env),
 	    ServiceIdList=string:tokens(atom_to_list(ServicesAtom),"X"),
-	    [application:start(list_to_atom(ServiceId))||ServiceId<-ServiceIdList]
+	    [application:start(list_to_atom(ServiceId))||ServiceId<-ServiceIdList],
+	    sys:log(log_service,true)
     end,
-    
+    ?LOG_INFO(event,{?MODULE,'started'}),
     {ok, #state{}}.
     
 %% --------------------------------------------------------------------
