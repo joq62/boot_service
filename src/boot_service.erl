@@ -117,7 +117,7 @@ init([]) ->
 	    {services,ServicesAtom}=lists:keyfind(services,1,Env),
 	    ServiceIdList=string:tokens(atom_to_list(ServicesAtom),"X"),
 	    [application:start(list_to_atom(ServiceId))||ServiceId<-ServiceIdList],
-	    sys:log(log_service,true)
+	    sys:log(log_service,{true,?LOG_BUFFER})
     end,
     ?LOG_INFO(event,{?MODULE,'started'}),
     {ok, #state{}}.
